@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/perfil.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TableTennis Universe</title>
+
+</head> 
+ <body>
+    <div class="header">
+        <div class="container">
+          <img class="logo" src="img/imagemraquete.png" alt="Sua imagem de raquete">
+          <h1 class="titulo">TableTennis Universe</h1>
+          <ul class="navbar">
+            <li>
+              <a href="index.html">Inicial</a>
+            </li>
+            <li>|</li>
+            <li>
+              <a href="saibaMais.html">Saiba Mais</a>
+            </li>
+            <li class="agora">
+              <a href="quiz.html">Quiz</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    <img class="imagemperfil" src="img/perfil2.png" alt="">
+      <main>
+        
+           <div class="card-perfil">
+                
+                        <h1>Meu Perfil</h1>
+                        <form>
+                            <img src="" id="preview" class="profile-image" alt="Preview da Foto de Perfil">
+                            <input type="file" id="profile-pic" accept="image/*">
+                        </form>
+                        <h3>Olá, <span id="b_usuario">usuário</span>!</h3>
+        
+                        <p>Email:  <span id="b_usuario2">email</span>!</h3>
+                        </p>
+                        <p><select name="Sexo" id="sexo">
+                            <option value="selecionar">selecionar</option>
+                            <option value="Feminino">Feminino</option>
+                            <option value="Masculino">Masculino</option>
+                        </select></p>
+                        
+                    </div>
+        
+                </main>
+            </body>
+        
+        </html>
+        <script>
+
+
+            const input = document.getElementById('profile-pic');
+            const preview = document.getElementById('preview');
+        
+            input.addEventListener('change', () => {
+                const file = input.files[0];
+                const reader = new FileReader();
+        
+                reader.addEventListener('load', () => {
+                    preview.setAttribute('src', reader.result);
+                });
+        
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
+            });
+        
+        
+        
+            b_usuario.innerHTML = sessionStorage.NOME_USUARIO;
+            b_usuario2.innerHTML = sessionStorage.EMAIL_USUARIO;
+            b_usuario3.innerHTML = sessionStorage.MODALIDADE_USUARIO;
+            b_usuarioS.innerHTML = sessionStorage.CIDADE_USUARIO;
+        
+        </script>
+        

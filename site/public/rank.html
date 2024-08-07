@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/rank.css" />
+   
+
+</head>
+
+<body onload="buscarPontuacao()">
+
+    <div class="header">
+        <div class="container">
+            <a href="./index.html">
+                <h1 class="titulo"> <img width="75px" height="75px"
+                        src="img/imagemraquete.png"
+                        alt=""></h1>
+            </a>
+            <ul class="navbar">
+                <li class="agora">Inicial</li>
+
+                <li>|</li>
+                <li>
+                    <a href="perfil.html">perfil</a>
+                </li>
+                <li>
+                    <a href="quiz.html">voltar</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <main>
+    <br><br><br><br>
+        <div class="Pontuacao">
+            <div class="card">
+                <h1 style="color: black;">Pontuação geral do quiz</h1>
+
+                <p>
+                Mínima pontuação possível: <b>0 Pontos</b><br>
+                Maxima pontuação possível: <b>80 Pontos</b>
+                </p>
+            
+                    <table id="infos" width="467" border="1px" bgcolor="white">
+                       
+                    </table>
+             
+            </div>
+            </main>
+</body>
+
+</html>
+
+<script>
+ function buscarPontuacao()
+    {
+        fetch("/rank/buscarPontuacao", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(function (resposta) {
+        // Verifica se a resposta HTTP foi bem-sucedida (status 200)
+        if (!resposta.ok) {
+            throw new Error(`Erro na requisição: ${resposta.statusText}`);
+        }
+
+        // Extrai os dados JSON da resposta
+        return resposta.json();
+    }).then(function (retorno) {
+        console.log(retorno)
+        var tabela = document.getElementById("infos");
+        var html = "<tr><th>Nome</th><th>Pontos</th></tr>";
+            retorno.forEach(usuario => {
+               html = html + `<tr><td>${usuario.nome}</td><td>${usuario.pontos}</td></tr>`
+                
+            });
+
+            tabela.innerHTML = html;
+
+    }).catch(function (erro) {
+        console.error('Erro:', erro);
+        // Tratar o erro conforme necessário
+    });
+    }
+
+</script>
+
+

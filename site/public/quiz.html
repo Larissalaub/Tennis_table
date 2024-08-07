@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/style.css" />
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TableTennis Universe</title>
+
+</head>
+<body onload="buscarPerguntas()">
+    <div class="header">
+        <div class="container">
+          <img class="logo" src="img/imagemraquete.png" alt="Sua imagem de raquete">
+          <h1 class="titulo">TableTennis Universe</h1>
+          <ul class="navbar">
+            <li>
+              <a href="perfil.html">Perfil</a>
+            </li>
+            <li>|</li>
+            <li>
+              <a href="saibaMais.html">Saiba Mais</a>
+            </li>
+            <li class="agora">
+              <a href="rank.html">pontuação</a>
+            </li>
+          </ul>
+        </div>
+        <img class="imgquiz" src="img/quiz.png" alt="">
+      </div>
+      <div class="quiz">
+        <div class="perguntas">
+            <span><h1 class="quizh1">Quiz</h1></span>
+            <div class="card" >
+                <div id="cardPerguntas">
+
+                </div>
+                <div style="display: flex;">
+                    <button class="botao" id="anterior" onclick="AntQuestao()">Questão Anterior</button>
+                    <button class="botao" id="proxima" onclick="ProxQuestao()">Próxima Questão</button>
+                    <button class="botao" id="finalizar" onclick="FinalizarQuiz()">Finalizar Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</html>
+
+<script>
+    document.getElementById('anterior').style.display = 'none';
+
+    document.getElementById('finalizar').style.display = 'none';
+
+
+
+    var Usuario = 0;
+    var anterior = 0;
+    var proxima = 0;
+    var pontos = 0;
+    var radios = [];
+    var respostascorretas = ["ping pong", "11 pontos", "Inglaterra", "1988", "Amarela", "Escolher se começa ou não o próximo set", "CBTM", "O tipo de borracha"];
+    var idUsuario = sessionStorage.idUsuario;
+    var media = 0
+
+
+    function buscarPerguntas()
+    {
+        fetch("/quiz/listarPerguntas", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(function (resposta) {
+        // Verifica se a resposta HTTP foi bem-sucedida (status 200)
+        if (!resposta.ok) {
+            throw new Error(`Erro na requisição: ${resposta.statusText}`);
+        }
+
+        // Extrai os dados JSON da resposta
+        return resposta.json();
+    }).then(function (perguntas) {
+        console.log("ESTOU NO THEN montar hmtl!");
+
+        var html = "";
+
+        perguntas.forEach(pergunta => {
+            html += `<div id="questao${pergunta.idPergunta}" style="display: none;">`;
+            html += `<h1>${pergunta.pergunta}</h1><br><br><br>`;
+            html += `<div class="resp">`;
+
+            pergunta.respostas.forEach(resposta => {
+                html += `<div class="opcao">`;
+                html += `<fieldset id="${pergunta.idPergunta}">`;    
+                html += ` <input type="radio" name="${pergunta.idPergunta}" value="${resposta.idResposta}">`;
+                html += ` <span class="text">${resposta.resposta}</span>`;
+                html += `</fieldset>`;    
+                html += `</div>`;
+            });
+
+            html += `</div>`;
+            html += `</div>`;
+        });
+      
+        var cardDiv = document.getElementById("cardPerguntas");
+        cardDiv.innerHTML = html;
+        questao1.style.display = 'block';
+    }).catch(function (erro) {
+        console.error('Erro:', erro);
+        // Tratar o erro conforme necessário
+    });
+    }
+
+
+    function AntQuestao() {
+        anterior--;
+        proxima = anterior
+
+        if (anterior == 6) {
+            question8.style.display = "none";
+            question7.style.display = "flex";
+            document.getElementById('anterior').style.display = 'block';
+            document.getElementById('finalizar').style.display = 'none';
+        } else if (anterior == 5) {
+            questao7.style.display = "none";
+            questao6.style.display = "flex";
+        } else if (anterior == 4) {
+            questao6.style.display = "none";
+            questao5.style.display = "flex";
+        } else if (anterior == 3) {
+            questao5.style.display = "none";
+            questao4.style.display = "flex";
+        } else if (anterior == 2) {
+            questao4.style.display = "none";
+            questao3.style.display = "flex";
+        } else if (anterior == 1) {
+            questao3.style.display = "none";
+            questao2.style.display = "flex";
+        } else if (anterior == 0) {
+            questao2.style.display = "none";
+            questao1.style.display = "flex";
+            document.getElementById('anterior').style.display = 'none';
+        }
+    }
+
+    function ProxQuestao() {
+        proxima++;
+        anterior = proxima
+        if (proxima == 1) {
+            questao1.style.display = "none";
+            questao2.style.display = "flex";
+            document.getElementById('anterior').style.display = 'block';
+
+        } else if (proxima == 2) {
+            questao2.style.display = "none";
+            questao3.style.display = "flex";
+        } else if (proxima == 3) {
+            questao3.style.display = "none";
+            questao4.style.display = "flex";
+        } else if (proxima == 4) {
+            questao4.style.display = "none";
+            questao5.style.display = "flex";
+        } else if (proxima == 5) {
+            questao5.style.display = "none";
+            questao6.style.display = "flex";
+        } else if (proxima == 6) {
+            questao6.style.display = "none";
+            questao7.style.display = "flex";
+        } else if (proxima == 7) {
+            questao7.style.display = "none";
+            questao8.style.display = "flex";
+            document.getElementById('proxima').style.display = 'none';
+            document.getElementById('finalizar').style.display = 'block';
+        }
+    }
+
+function FinalizarQuiz() {
+    var respostasSelecionadas = [];
+
+// Obtém todos os elementos de input do tipo radio dentro da div "cardPerguntas"
+var radios = document.querySelectorAll('#cardPerguntas input[type="radio"]');
+
+// Objeto para agrupar os radio buttons por nome
+var radiosPorNome = {};
+
+radios.forEach(function (radio) {
+    // Adiciona o radio button ao grupo correspondente ao nome (name) do campo
+    if (!radiosPorNome[radio.name]) {
+        radiosPorNome[radio.name] = [];
+    }
+    radiosPorNome[radio.name].push(radio);
+});
+
+// Rastreia os grupos que têm pelo menos um radio selecionado
+var gruposRespondidos = new Set();
+
+// Itera sobre cada grupo de radio buttons
+for (var nome in radiosPorNome) {
+    var radioButtons = radiosPorNome[nome];
+    var peloMenosUmSelecionado = radioButtons.some(function (radio) {
+        return radio.checked;
+    });
+
+    if (peloMenosUmSelecionado) {
+        // Adiciona o nome do grupo ao conjunto de grupos respondidos
+        gruposRespondidos.add(nome);
+    }
+}
+
+// Obtém a lista de fieldsets
+var fieldsets = document.querySelectorAll('#cardPerguntas fieldset');
+
+// Verifica se pelo menos um radio button está selecionado para cada fieldset
+var todosRespondidos = Array.from(fieldsets).every(function (fieldset) {
+    var nomeDoGrupo = fieldset.querySelector('input[type="radio"]').name;
+    return gruposRespondidos.has(nomeDoGrupo);
+});
+
+// Se todos os fieldsets foram respondidos, chama a API
+if (todosRespondidos) {
+    var radios = document.querySelectorAll('#cardPerguntas input[type="radio"]:checked');
+    
+    // pegar o usuario logado 
+    var usuarioID = sessionStorage.getItem("ID_USUARIO");
+   
+    // Itera sobre cada radio button selecionado e adiciona o valor à lista
+    radios.forEach(function (radio) {
+        respostasSelecionadas.push({
+            idPergunta: radio.name,
+            idResposta: radio.value
+        });
+
+       
+    });
+
+    fetch("/quiz/salvarPontuacao", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                respostas: respostasSelecionadas,
+                usuario: usuarioID
+            })
+        }).then(function (resposta) { 
+            if (resposta.ok) {
+
+                window.location = "./rank.html";
+                resposta.json().then(json => {
+                    window.location = "./rank.html";
+                    
+                });
+
+            } else {
+
+                console.log("Houve um erro ao tentar realizar o login!");
+
+                resposta.text().then(texto => {
+                    console.error(texto);
+                    finalizarAguardar(texto);
+                });
+            }
+
+        }).catch(function (erro) {
+            console.log(erro);
+        })
+
+        return false;
+} else {
+    // Se não, exibe um alerta
+    alert('Por favor, selecione pelo menos uma opção em cada conjunto de perguntas antes de enviar.');
+}
+   
+    
+
+}
+</script>
